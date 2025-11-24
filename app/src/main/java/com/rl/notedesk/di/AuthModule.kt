@@ -6,6 +6,7 @@ import com.rl.notedesk.domain.repository.AuthRepository
 import com.rl.notedesk.domain.usecase.authusecase.GetCurrentUserUserCase
 import com.rl.notedesk.domain.usecase.authusecase.ResetPasswordUseCase
 import com.rl.notedesk.domain.usecase.authusecase.SignInUseCase
+import com.rl.notedesk.domain.usecase.authusecase.SignOutUseCase
 import com.rl.notedesk.domain.usecase.authusecase.SignUpUseCase
 import dagger.Module
 import dagger.Provides
@@ -42,4 +43,8 @@ object AuthModule {
     @Singleton
     fun provideGetCurrentUserUseCase(authRepository: AuthRepository): GetCurrentUserUserCase =
         GetCurrentUserUserCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideSignOutUseCase(authRepository: AuthRepository): SignOutUseCase = SignOutUseCase(authRepository)
 }

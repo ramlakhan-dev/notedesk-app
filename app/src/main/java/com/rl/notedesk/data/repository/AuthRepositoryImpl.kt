@@ -45,7 +45,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun signOut() {
-        TODO("Not yet implemented")
+        firebaseAuth.signOut()
     }
 
     override fun getCurrentUser(): FirebaseUser? {
