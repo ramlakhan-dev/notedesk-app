@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.rl.notedesk.domain.model.AuthResult
 import com.rl.notedesk.domain.model.OpResult
 import com.rl.notedesk.domain.repository.AuthRepository
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -14,14 +15,24 @@ class AuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): AuthResult {
-        TODO("Not yet implemented")
+        return try {
+            firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            AuthResult.Authenticated
+        } catch (e: Exception) {
+            AuthResult.Error(e.message ?: "Sign Up failed")
+        }
     }
 
     override suspend fun signIn(
         email: String,
         password: String
     ): AuthResult {
-        TODO("Not yet implemented")
+        return try {
+            firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            AuthResult.Authenticated
+        } catch (e: Exception) {
+            AuthResult.Error(e.message ?: "Sign In failed")
+        }
     }
 
     override suspend fun sendResetPasswordLink(email: String): OpResult {
