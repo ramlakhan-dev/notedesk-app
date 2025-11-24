@@ -49,6 +49,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun getCurrentUser(): FirebaseUser? {
-        TODO("Not yet implemented")
+        return firebaseAuth.currentUser
     }
 }

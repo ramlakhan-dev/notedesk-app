@@ -3,6 +3,7 @@ package com.rl.notedesk.di
 import com.google.firebase.auth.FirebaseAuth
 import com.rl.notedesk.data.repository.AuthRepositoryImpl
 import com.rl.notedesk.domain.repository.AuthRepository
+import com.rl.notedesk.domain.usecase.authusecase.GetCurrentUserUserCase
 import com.rl.notedesk.domain.usecase.authusecase.ResetPasswordUseCase
 import com.rl.notedesk.domain.usecase.authusecase.SignInUseCase
 import com.rl.notedesk.domain.usecase.authusecase.SignUpUseCase
@@ -36,4 +37,9 @@ object AuthModule {
     @Singleton
     fun provideResetPasswordUseCase(authRepository: AuthRepository): ResetPasswordUseCase =
         ResetPasswordUseCase(authRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentUserUseCase(authRepository: AuthRepository): GetCurrentUserUserCase =
+        GetCurrentUserUserCase(authRepository)
 }

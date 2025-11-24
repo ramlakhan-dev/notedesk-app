@@ -11,20 +11,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rl.notedesk.R
 import com.rl.notedesk.presentation.navigation.AppNavGraph
 import com.rl.notedesk.presentation.navigation.Screen
+import com.rl.notedesk.presentation.state.AuthState
+import com.rl.notedesk.presentation.viewmodel.AuthViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteDeskApp() {
 
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val userState by authViewModel.userState.collectAsState()
 
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -67,7 +73,7 @@ fun NoteDeskApp() {
         AppNavGraph(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            isAuthenticated = false
+            isAuthenticated = userState is AuthState.Authenticated
         )
     }
 }
