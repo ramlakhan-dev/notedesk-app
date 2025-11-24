@@ -15,8 +15,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,10 +39,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.rl.notedesk.R
+import com.rl.notedesk.presentation.component.ForgotPasswordBottomSheet
 import com.rl.notedesk.presentation.component.OutlinedInputField
 import com.rl.notedesk.presentation.navigation.Screen
 import com.rl.notedesk.presentation.state.AuthState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
@@ -68,6 +73,26 @@ fun SignInScreen(
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSheet by remember { mutableStateOf(false) }
+
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showSheet = false
+            },
+            sheetState = sheetState
+        ) {
+            ForgotPasswordBottomSheet(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) { email ->
+                signInViewModel.sendResetPasswordLink(email)
+                showSheet = false
+            }
+        }
+    }
 
     Column(
         modifier = modifier
@@ -155,7 +180,7 @@ fun SignInScreen(
                 .padding(vertical = 16.dp)
                 .align(Alignment.End)
                 .clickable {
-
+                    showSheet = true
                 }
         )
 
